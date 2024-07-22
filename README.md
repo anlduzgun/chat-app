@@ -86,44 +86,44 @@ flowchart TD
 ```mermaid
 erDiagram
     Users {
-        int id PK
+        UUID id PK
         string username "unique, not null"
         string email "unique, not null"
         string password_hash "not null"
     }
 
     Events {
-        int id PK
+        UUID id PK
         string name "not null"
-        string description
-        datetime start_time "not null"
-        datetime end_time "not null"
-        string location
+        string description "not null"
+        naive_datetime start_time "not null"
+        naive_datetime end_time "not null"
+        string location "not null"
     }
 
     Tickets {
-        int id PK
-        int event_id FK
+        UUID id PK
+        UUID event_id FK
         string ticket_number "unique, not null"
         int user_id FK
     }
 
     ChatRooms {
-        int id PK
-        int event_id FK
+        UUID id PK
+        UUID event_id FK
         string status "not null, default: 'inactive'"
     }
 
     Messages {
-        int id PK
-        int chat_room_id FK
-        int user_id FK
+        UUID id PK
+        UUID chat_room_id FK
+        UUID user_id FK
         string content "not null"
         string content_type "not null, default: 'text'"
     }
 
     Notifications {
-        int id PK
+        UUID id PK
         int user_id FK
         int event_id FK
         string message "not null"
@@ -131,10 +131,10 @@ erDiagram
     }
 
     Users ||--o{ Tickets : "has"
-    Users ||--o{ Messages : "sends"
-    Users ||--o{ Notifications : "receives"
-    Events ||--o{ Tickets : "includes"
-    Events ||--o{ Notifications : "triggers"
-    Events ||--|| ChatRooms : "hosts"
-    ChatRooms ||--o{ Messages : "contains"
+    Users ||--o{ Messages : "send"
+    Users ||--o{ Notifications : "receive"
+    Events ||--o{ Tickets : "include"
+    Events ||--o{ Notifications : "trigger"
+    Events ||--|| ChatRooms : "contain"
+    ChatRooms ||--o{ Messages : "contain"
 ```
