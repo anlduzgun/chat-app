@@ -5,11 +5,20 @@
 1.  [Flow Chart](#flow-chart)
 2.  [Database Design](#database-design)
 3.  [Endpoints](#endpoints)
-    -   [Events](#events)
+    - [Events](#events)
         -   [Create Event](#create-event)
         -   [Update Event](#update-event)
         -   [Delete Event](#delete-event)
         -   [Get Event's Chat Room](#get-events-chat-room)
+	- [Users](#users)
+        -   [Sign Up](#sign-up)
+        -   [Sign In](#sign-in)
+        -   [Update User](#update-user)
+        -   [Delete User](#delete-user)
+	- [Tickets](#tickets)
+	    - [Create Ticket](#create-ticket)
+    - [Chat Room](#chat-rooms)
+		- [Join Chat Room](#join-chat-room)
 
 # Flow Chart
 
