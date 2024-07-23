@@ -1,4 +1,17 @@
-## Flow Chart
+# Ticket Reservation Messaging Service
+
+## Table of Contents
+
+1.  [Flow Chart](#flow-chart)
+2.  [Database Design](#database-design)
+3.  [Endpoints](#endpoints)
+    -   [Events](#events)
+        -   [Create Event](#create-event)
+        -   [Update Event](#update-event)
+        -   [Delete Event](#delete-event)
+        -   [Get Event's Chat Room](#get-events-chat-room)
+
+# Flow Chart
 
 ```mermaid
 flowchart TD
@@ -82,7 +95,7 @@ flowchart TD
     E4 --> G1
 ```
 
-## Database design 
+# Database design 
 ```mermaid
 erDiagram
     Users {
@@ -138,3 +151,107 @@ erDiagram
     Events ||--|| ChatRooms : "contain"
     ChatRooms ||--o{ Messages : "contain"
 ```
+
+# Endpoints
+
+### Events
+---
+
+#### Create Event
+
+Creates an event along with its associated chat room.
+
+`POST api/events/create_event`
+    
+   **Parameters**:
+    
+   -   `name` (string): The name of the event.
+   -   `description` (string): A brief description of the event.
+   -   `location` (string): The location where the event will take place.
+   -   `start_time` (string): The start time of the event in the format "YYYY-MM-DD HH:MM :SS"
+   -   `end_time` (string): The end time of the event in the format "YYYY-MM-DD HH:MM:SS ".
+    
+**Example Usage**:
+    
+ `Request Body:`
+  
+```json{
+      {"event": {
+        "name": "concert",
+        "description": "A great music concert",
+        "location": "Antalya",
+        "start_time": "2025-01-01 19:00:07",
+        "end_time": "2025-01-01 23:00:07"
+	      }
+	   }
+```
+ `Response:`
+    
+  - `201 Created`: The event was successfully created and returned in the response body.
+  - `422 Unprocessable Entity`: The request body contains invalid data.
+
+---  
+#### Update Event
+ Updates an event with the given parameters.
+ 
+ `POST api/events/update_event`
+
+**Parameters**:
+  - `id` (string): The ID of the event to be updated.
+  - `event` (map): A map containing the event parameters to be updated.
+
+**Event Parameters**:
+  - `name` (string, optional): The updated name of the event.
+  - `description` (string, optional): The updated description of the event.
+  - `location` (string, optional): The updated location of the event.
+  - `start_time` (string, optional): The updated start time of the event in the format "YYYY-MM-DD HH:MM:SS".
+  - `end_time` (string, optional): The updated end time of the event in the format "YYYY-MM-DD HH:MM:SS".
+
+**Example Usage**:
+
+`Request Body:`
+  ```json
+  {
+    "id": "44d2557e-ec2b-4dc5-a0cc-f8b5cb83bc6f",
+    "event": {
+      "name": "Updated Concert",
+      "description": "An updated great music concert",
+      "location": "Updated Antalya",
+      "start_time": "2025-01-01 20:00:00",
+      "end_time": "2025-01-01 23:30:00"
+    }
+  }
+```
+
+`Response:`
+ - `200 OK:` The event was successfully updated and returned in the response body.
+ - `404 Not Found:` The event with the given ID was not found.
+ - `422 Unprocessable Entity:` The request body contains invalid data.
+
+---
+#### Delete Event
+To be documented
+
+---
+#### Get Event's Chat Room
+
+ Retrieves the chat room associated with the given event ID.
+ 
+`POST api/events/get_chat_room_by_id`
+
+**Parameters:**
+
+  - `event_id` (string): The ID of the event.
+
+**Example Usage:**
+
+  `Request Body:`
+```json
+  {
+    "event_id": "44d2557e-ec2b-4dc5-a0cc-f8b5cb83bc6f"
+  }
+```
+
+  `Response:`
+  - `200 OK:` The chat room ID and status are returned.
+  - `404 Not Found:` No chat room found for the given event ID.
