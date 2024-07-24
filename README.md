@@ -13,6 +13,7 @@
 	- [Users](#users)
         -   [Sign Up](#sign-up)
         -   [Sign In](#sign-in)
+        -   [Sign Out](#sign-out)
         -   [Update User](#update-user)
         -   [Delete User](#delete-user)
 	- [Tickets](#tickets)
