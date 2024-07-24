@@ -182,7 +182,7 @@ Creates an event along with its associated chat room.
     
 **Example Usage**:
     
- `Request Body:`
+ `Request Body`:
   
 ```json{
       {"event": {
@@ -194,7 +194,7 @@ Creates an event along with its associated chat room.
 	      }
 	   }
 ```
- `Response:`
+ `Response`:
     
   - `201 Created`: The event was successfully created and returned in the response body.
   - `422 Unprocessable Entity`: The request body contains invalid data.
@@ -218,7 +218,7 @@ Creates an event along with its associated chat room.
 
 **Example Usage**:
 
-`Request Body:`
+`Request Body`:
   ```json
   {
     "id": "44d2557e-ec2b-4dc5-a0cc-f8b5cb83bc6f",
@@ -232,14 +232,28 @@ Creates an event along with its associated chat room.
   }
 ```
 
-`Response:`
- - `200 OK:` The event was successfully updated and returned in the response body.
- - `404 Not Found:` The event with the given ID was not found.
- - `422 Unprocessable Entity:` The request body contains invalid data.
+`Response`:
+ - `200 OK`: The event was successfully updated and returned in the response body.
+ - `404 Not Found`: The event with the given ID was not found.
+ - `422 Unprocessable Entity`: The request body contains invalid data.
 
 ---
 #### Delete Event
-To be documented
+ Deletes an event based on the given event ID.
+
+ `DELETE /api/events/:id`
+
+**Parameters**: 
+  - `event_id`: The ID of the event to be deleted.
+
+**Example Usage**:
+ `DELETE /api/events/44d2557e-ec2b-4dc5-a0cc-f8b5cb83bc6f`
+      
+`Response`:
+ - `204 No Content`: The event was successfully deleted.
+ - `404 Not Found`: No event found with the given ID.
+ - `500 Internal Server Error`: Server error during event deletion
+
 
 ---
 #### Get Event's Chat Room
@@ -254,13 +268,13 @@ To be documented
 
 **Example Usage:**
 
-  `Request Body:`
+  `Request Body`:
 ```json
   {
     "event_id": "44d2557e-ec2b-4dc5-a0cc-f8b5cb83bc6f"
   }
 ```
 
-  `Response:`
-  - `200 OK:` The chat room ID and status are returned.
-  - `404 Not Found:` No chat room found for the given event ID.
+  `Response`:
+  - `200 OK`: The chat room ID and status are returned.
+  - `404 Not Found`: No chat room found for the given event ID.
