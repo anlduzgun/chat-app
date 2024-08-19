@@ -20,8 +20,7 @@
 	- [Tickets](#tickets)
 	    - [Create Ticket](#create-ticket)
    		- [Assign Ticket](#assign-ticket)
-    - [Chat Room](#chat-rooms)
-		- [Join Chat Room](#join-chat-room)
+    - [Chat Room](#chat-room)
 
 # Flow Chart
 
@@ -431,3 +430,128 @@ Creates an event along with its associated chat room.
   `Response`:
   - `200 OK`: Returns the updated ticket with the assigned user.
   - `404 Not Found`: Returns an error if the ticket does not exist.
+
+### Chat Room
+---
+#### 1. **Establish WebSocket Connection**
+
+**Endpoint:** `ws://localhost:4000/socket`
+
+**Parameters:**
+- `token`: The JWT token for authentication.
+
+```javascript
+import { Socket } from "phoenix";
+
+let socket = new Socket("ws://localhost:4000/socket", { params: { token: "<JWT_TOKEN>" } });
+
+socket.connect();
+```
+
+**Description:**  
+This code initiates a WebSocket connection to the Phoenix server using a JWT token for authentication.
+
+---
+
+#### 2. **Join Channel**
+
+**Channel Name:** `event: event_id`
+
+**Example Usage:**
+
+```javascript
+let channel = socket.channel("event:44d2557e-ec2b-4dc5-a0cc-f8b5cb83bc6f", {});
+
+channel.join()
+  .receive("ok", resp => { console.log("Joined successfully", resp); })
+  .receive("error", resp => { console.log("Unable to join", resp); });
+```
+
+**Description:**  
+Joins a specific channel based on the event ID. The `receive` function handles the success or error response from the server.
+
+---
+
+#### 3. **Send Message**
+
+**Function:** `sendMessage(content)`
+
+**Method:** `channel.push`
+
+**Parameters:**
+- `content` (string): The message content to be sent.
+
+**Example Usage:**
+
+```javascript
+sendMessage("Hello, World!")
+  .then(resp => console.log("Message sent", resp))
+  .catch(err => console.error("Message failed", err));
+```
+
+**Description:**  
+Sends a new message to the channel. Returns a promise that resolves when the message is sent successfully or rejects if there is an error.
+
+---
+
+#### 4. **Notify Typing Status**
+
+**Function:** `sendTyping(typing)`
+
+**Method:** `channel.push`
+
+**Parameters:**
+- `typing` (boolean): The typing status (`true` if typing, `false` if not).
+
+**Example Usage:**
+
+```javascript
+sendTyping(true);
+```
+
+**Description:**  
+Notifies the server that the user is typing. This is useful for real-time feedback to other users.
+
+---
+
+#### 5. **Handle Incoming Messages**
+
+**Function:** `onMessageReceived(callback)`
+
+**Method:** `channel.on`
+
+**Parameters:**
+- `callback` (function): A callback function to handle incoming messages.
+
+**Example Usage:**
+
+```javascript
+onMessageReceived((message) => {
+  console.log("New message received", message);
+});
+```
+
+**Description:**  
+Listens for incoming messages on the channel and triggers the provided callback function when a new message is received.
+
+---
+
+#### 6. **Handle Typing Notifications**
+
+**Function:** `onUserTyping(callback)`
+
+**Method:** `channel.on`
+
+**Parameters:**
+- `callback` (function): A callback function to handle typing notifications.
+
+**Example Usage:**
+
+```javascript
+onUserTyping((typingStatus) => {
+  console.log("User typing status", typingStatus);
+});
+```
+
+**Description:**  
+Listens for typing status updates on the channel and triggers the provided callback function when a typing status is received.
