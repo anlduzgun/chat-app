@@ -280,3 +280,26 @@ Creates an event along with its associated chat room.
   `Response`:
   - `200 OK`: The chat room ID and status are returned.
   - `404 Not Found`: No chat room found for the given event ID.
+
+### Users
+---
+#### Sign In
+  Authenticates a user and returns a token upon successful sign-in.
+
+  `POST api/users/sign_in`
+
+  **Parameters**:
+  email (string): The user's email.
+  password_hash (string): The user's password hash.
+
+  **Example Usage**:
+
+  ```json
+  {
+    "email": "sample@email.com", 
+    "password_hash": "hashed+password"
+  }
+  ```
+  `Response`: 
+  - `200 OK`: Returns the authenticated user and a token.
+  - `401 Unauthorized`: Raises an error if the email or password is incorrect.
