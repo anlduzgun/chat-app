@@ -14,10 +14,12 @@
         -   [Sign Up](#sign-up)
         -   [Sign In](#sign-in)
         -   [Sign Out](#sign-out)
+        -   [Show User](#show-user)
         -   [Update User](#update-user)
         -   [Delete User](#delete-user)
 	- [Tickets](#tickets)
 	    - [Create Ticket](#create-ticket)
+   		- [Assign Ticket](#assign-ticket)
     - [Chat Room](#chat-rooms)
 		- [Join Chat Room](#join-chat-room)
 
@@ -279,3 +281,153 @@ Creates an event along with its associated chat room.
   `Response`:
   - `200 OK`: The chat room ID and status are returned.
   - `404 Not Found`: No chat room found for the given event ID.
+
+### Users
+---
+#### Sign Up
+	Creates a new user and returns a token upon successful creation.
+
+  `POST api/users/create`
+
+  **Parameters**: 
+
+  - `user_params` (map):
+
+  **Example Usage**:
+
+  ```json
+  {
+    "user_params": {
+    "username": "sample_user", 
+    "email": "sample@email.com" , 
+    "password_hash": "hashed+password"
+    }
+  }
+  ```
+ 
+  `Response`:
+  - `201 Created`: Returns the created user and an authentication token.
+
+---
+#### Sign In
+  Authenticates a user and returns a token upon successful sign-in.
+
+  `POST api/users/sign_in`
+
+  **Parameters**:
+  email (string): The user's email.
+  password_hash (string): The user's password hash.
+
+  **Example Usage**:
+
+  ```json
+  {
+    "email": "sample@email.com", 
+    "password_hash": "hashed+password"
+  }
+  ```
+  `Response`: 
+  - `200 OK`: Returns the authenticated user and a token.
+  - `401 Unauthorized`: Raises an error if the email or password is incorrect.
+---
+#### Show User
+  Retrieves and displays user details by ID.  
+
+  `GET api/users/:id`
+
+  **Parameters**:
+  - `id`: The user's ID.
+
+  **Example Usage**:
+  `GET /api/users/44d2557e-ehb0-a45e-a0cc-f8b5cb83bc6f`
+
+  `Responses`:
+  - `200 OK`:Returns the user details.  
+  - `401 Unauthorized`: Raises an error if token invalid.
+  - `403 Forbidden`: Raises an an error if session id and id paramater don't match 
+---
+#### Update User
+  Updates an existing user's information.
+
+  `POST api/users/update`
+
+  **Parameters**:
+  - `id` (string): The user's ID.
+  - `user_params` (map): A map containing the updated user parameters.
+ 
+  **Example Usage**:
+
+  ```json
+  { 
+    "id": "44d2557e-ehb0-a45e-a0cc-f8b5cb83bc6f",
+    "user_params":
+      {
+      "email": "updated@email.com", 
+      "password_hash": "updated+hashed+password"
+      }
+  }
+  ```
+  `Response`:
+  - `200 OK`: Returns the updated user details.
+  - `401 Unauthorized`: Raises an error if token invalid.
+  - `403 Forbidden`: Raises an an error if session id and id paramater don't match
+---
+#### Delete User
+
+  Deletes a user by ID.
+
+  `DELETE api/users/delete_user/:id`
+
+  **Parameters**:
+  - `id`: The user's ID.
+
+  **Example Usage**:
+  `DELETE /api/users/delete/44d2557e-ehb0-a45e-a0cc-f8b5cb83bc6f`
+  
+  `Response`:
+  - `204 No Content`: Confirms the user has been deleted.
+  - `401 Unauthorized`: Raises an error if token invalid.
+  - `403 Forbidden`: Raises an an error if session id and id paramater don't match
+    
+### Tickets
+---
+#### Create Ticket
+  Creates a new ticket.
+
+  `POST /api/tickets/create`
+
+  **Parameters**:
+
+  - `ticket_params` (map): A map containing the ticket details.
+
+  **Example Usage**:
+
+  ```json
+  {
+    "ticket": {
+      "ticket_number": "123456789",
+      "event_id": "44d2557e-ehb0-a45e-a0cc-f8b5cb83bc6f"
+    }
+  }
+```
+
+  `Response`:
+  - `201 Created`: Returns the created ticket.
+---
+#### Assign Ticket
+  Assigns a ticket to a user.
+
+  `PATCH /api/tickets/:ticket_id/assign/:user_id`
+
+  **Parameters**:
+
+  `ticket_id` (string): The ID of the ticket to be assigned.
+  `user_id` (string): The ID of the user to whom the ticket will be assigned.
+  
+  **Example Usage**:
+	`PATCH /api/tickets/44d2557e-ehb0-a45e-a0cc-f8b5cb83bc6f/assign/78f9b11e-bc90-45e2-9f7f-5d4df4c7e5bb`
+ 
+
+  `Response`:
+  - `200 OK`: Returns the updated ticket with the assigned user.
+  - `404 Not Found`: Returns an error if the ticket does not exist.
