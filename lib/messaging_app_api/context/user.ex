@@ -4,6 +4,9 @@ defmodule MessagingAppApi.Context.User do
   alias MessagingAppApi.Repo
   alias MessagingAppApi.User
   
+  def list_users do
+    Repo.all(User)
+  end
 
   def create_user(params \\%{}) do
     %User{}

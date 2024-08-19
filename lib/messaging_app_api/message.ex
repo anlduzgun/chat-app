@@ -15,7 +15,7 @@ defmodule MessagingAppApi.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:content, :content_type])
-    |> validate_required([:content, :content_type])
+    |> cast(attrs, [:content, :content_type, :user_id, :chat_room_id])
+    |> validate_required([:content, :content_type, :user_id, :chat_room_id])
   end
 end

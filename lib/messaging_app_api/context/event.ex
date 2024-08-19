@@ -2,7 +2,7 @@ defmodule MessagingAppApi.Context.Event do
   
   import Ecto.Query
   alias MessagingAppApi.Repo
-  alias MessagingAppApi.{Event, ChatRoom}
+  alias MessagingAppApi.{Event}
 
   def create_event(params) do
     %Event{}
@@ -18,7 +18,7 @@ defmodule MessagingAppApi.Context.Event do
   
 
   def get_event_by_id(id) do
-    Repo.one!(Event,id)
+    Repo.get!(Event,id)
   end
 
   def update_event(%Event{} = event, attrs) do
@@ -31,17 +31,12 @@ defmodule MessagingAppApi.Context.Event do
     Repo.delete!(event)
   end
   
-  def get_chat_room_id_by_event_id(event_id) do
+  def get_chat_room_by_event_id(event_id) do
     query = from e in Event,
             join: c in assoc(e, :chat_room),
             where: e.id == ^event_id,
             select: c 
-    """
-    case Repo.one(query) do
-      nil -> {:error, "Chat room not found for the given event ID"}
-      chat_room = %ChatRoom{} -> {:ok, chat_room}
-    end
-    """
+  
     Repo.one!(query)
   end
 

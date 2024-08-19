@@ -14,6 +14,7 @@
         -   [Sign Up](#sign-up)
         -   [Sign In](#sign-in)
         -   [Sign Out](#sign-out)
+        -   [Show User](#show-user)
         -   [Update User](#update-user)
         -   [Delete User](#delete-user)
 	- [Tickets](#tickets)

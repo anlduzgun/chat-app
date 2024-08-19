@@ -27,7 +27,18 @@ defmodule MessagingAppApiWeb.Auth.Guardian do
       nil -> {:error, :unauthorized}
       user -> 
         case validate_password(password, user.password_hash) do
-          true -> create_token(user) 
+          true -> create_token(user, :access) 
+          false -> {:error, :unauthorized}
+        end
+    end
+  end
+  
+  def authenticate_admin(email, password) do
+    case User.get_user_by_email(email) do
+      nil -> {:error, :unauthorized}
+      user -> 
+        case validate_password(password, user.password_hash) do
+          true -> create_token(user, :admin) 
           false -> {:error, :unauthorized}
         end
     end
@@ -38,8 +49,18 @@ defmodule MessagingAppApiWeb.Auth.Guardian do
     Bcrypt.verify_pass(password, password_hash)
   end
 
-  defp create_token(user) do
-    {:ok, token, _claims} = encode_and_sign(user)
+  defp create_token(user, type) do
+    {:ok, token, _claims} = encode_and_sign(user, %{}, token_options(type))
     {:ok, user, token}
   end
+
+
+  defp token_options(type) do
+    case type do
+      :access -> [token_type: "access", ttl: {2, :hour}]
+      :reset -> [token_type: "reset", ttl: {15, :minute}]
+      :admin -> [token_type: "admin", ttl: {90, :day}]
+    end
+  end
+
 end

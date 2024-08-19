@@ -142,7 +142,7 @@ defmodule MessagingAppApiWeb.EventController do
   404 Not Found: No chat room found for the given event ID.
   """  
   def get_chat_room(conn, %{"event_id" => event_id}) do
-    case Event_context.get_chat_room_id_by_event_id(event_id) do
+    case Event_context.get_chat_room_by_event_id(event_id) do
       {:ok, %ChatRoom{} = chat_room} ->
         conn
         |> put_status(:ok)

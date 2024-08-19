@@ -16,23 +16,49 @@ defmodule MessagingAppApiWeb.Router do
     plug :fetch_session
   end
 
-  pipeline :auth do
-    plug MessagingAppApiWeb.Auth.Pipeline
+  pipeline :user_auth do
+    plug MessagingAppApiWeb.Auth.Pipeline.Access
     plug MessagingAppApiWeb.Auth.SetUser
   end
 
-  scope "/api", MessagingAppApiWeb do
-    pipe_through :api
-    get "/", DefaultController,  :index
-    post "/events/create_event", EventController, :create
-    post "/users/create", UserController, :create
-    post "/users/sign_in", UserController, :sign_in
+  pipeline :admin_auth do
+    plug MessagingAppApiWeb.Auth.Pipeline.Admin
   end
 
-  scope "/api", MessagingAppApiWeb do
-    pipe_through [:api, :auth]
-    get "/events/get_chat_room_by_id/:event_id", EventController, :get_chat_room
-    get "/users/get_user_by_id/:id", UserController, :show 
+  scope "/api/users", MessagingAppApiWeb do
+    pipe_through :api 
+    post "/create", UserController, :create
+    post "/sign_in", UserController, :sign_in
   end
+  
+  scope "/api/users", MessagingAppApiWeb do
+    pipe_through [:api, :user_auth] 
+    get "/:id", UserController, :show
+    post "/update", UserController, :update
+    delete "/delete", UserController, :delete
+  end
+
+  scope "/api/events", MessagingAppApiWeb do
+    pipe_through [:api, :admin_auth ]
+    post "/create_event", EventController, :create
+    get "/get_chat_room_by_id/:event_id", EventController, :get_chat_room
+    put "/update", EventController, :update
+  end
+
+  scope "/api/events", MessagingAppApiWeb do
+    pipe_through :api
+  end
+
+
+  scope "/api/tickets", MessagingAppApiWeb do
+    pipe_through [:api, :admin_auth]
+    post "/create", TicketController, :create_ticket
+  end
+
+  scope "/api/tickets", MessagingAppApiWeb do
+    pipe_through [:api, :user_auth]
+    patch "/:ticket_id/assign/:user_id", TicketController, :assign_ticket_to_user
+  end
+
   
 end

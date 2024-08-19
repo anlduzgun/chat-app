@@ -14,8 +14,9 @@ defmodule MessagingAppApi.Ticket do
   @doc false
   def changeset(ticket, attrs) do
     ticket
-    |> cast(attrs, [:ticket_number, :event_id])
+    |> cast(attrs, [:ticket_number, :event_id, :user_id])
     |> validate_required([:ticket_number, :event_id])
     |> unique_constraint(:ticket_number)
+    |> foreign_key_constraint(:user_id)
   end
 end
